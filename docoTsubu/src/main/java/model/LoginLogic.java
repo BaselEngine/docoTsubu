@@ -1,23 +1,45 @@
 package model;
 
+import model.User;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+//import javax.swing.*;
 
 public class LoginLogic {
 	
-	final String fileName = "workspace/docoTsubu/Regist.txt";
+	final String fileName = makeFiles("Regist.txt");
 	
+	public static String makeFiles(String fileName)
+	{
+		//FileWriter fw = null;
+		// Œ»İ‚ÌƒfƒBƒŒƒNƒgƒŠî•ñ‚ğæ“¾
+		String path =  System.getProperty("user.dir"); 
+		path = new File(path, fileName).getPath();
+		
+		
+		try(FileWriter fw = new FileWriter(fileName, true);)
+		{
+			fw.close();
+		}
+		catch(IOException e)
+		{
+			
+		Logger(e);
+		}		
+		return path;
+	}
 	
 	public boolean execute(User user) {
 		List<List<String>> big_list = new ArrayList<List<String>>();
-		
+		//JOptionPane.showMessageDialog(null,System.getProperty("user.dir"));
 		big_list = FileReader(fileName);
 		if(isExist(big_list, user.getName(), user.getPass())) return true;
 		
@@ -34,24 +56,24 @@ public class LoginLogic {
 	
 	
 	protected static List<List<String>> FileReader(String fileName){
-		List<List<String>> big_list = new ArrayList<List<String>>();	//äºŒã¤ã®ãƒªã‚¹ãƒˆã‚’ä¿å­˜ã™ã‚‹å¤§ããªãƒªã‚¹ãƒˆ
-		List<String> list_1= new ArrayList<String>();	//æ•°å­—ã®éƒ¨åˆ†ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
-		List<String> list_2 = new ArrayList<String>();	//åå‰ã®éƒ¨åˆ†ã‚’æ ¼ç´ã™ã‚‹ãƒªã‚¹ãƒˆ
+		List<List<String>> big_list = new ArrayList<List<String>>();	//“ñ‚Â‚ÌƒŠƒXƒg‚ğ•Û‘¶‚·‚é‘å‚«‚ÈƒŠƒXƒg
+		List<String> list_1= new ArrayList<String>();	//ƒ†[ƒU[–¼‚Ì•”•ª‚ğŠi”[‚·‚éƒŠƒXƒg
+		List<String> list_2 = new ArrayList<String>();	//ƒpƒXƒ[ƒh‚Ì•”•ª‚ğŠi”[‚·‚éƒŠƒXƒg
 		String line;
 		int k;
 		
 		
 		try( FileReader fileReaderr = new FileReader(fileName);
 			BufferedReader bufferReader = new BufferedReader(fileReaderr); ){
-			// 1è¡Œã¥ã¤èª­ã¿è¾¼ã‚€
+			// 1s‚Ã‚Â“Ç‚İ‚Ş
 			while ((line = bufferReader.readLine()) != null){
-				//ã€Œ ï¼š ã€ã§åˆ†å‰²ã™ã‚‹ã€‚
+				//u F v‚Å•ªŠ„‚·‚éB
 				k = line.indexOf(":");
 				list_1.add(line.substring(0,k));
 				list_2.add(line.substring(k + 1));
 			}
 			
-			//dig_listã«list_1,2ã‚’æ ¼ç´ã™ã‚‹ã€‚
+			//dig_list‚Élist_1,2‚ğŠi”[‚·‚éB
 			big_list.add(list_1);
 			big_list.add(list_2);
 			return big_list;
@@ -64,37 +86,37 @@ public class LoginLogic {
 	}
 	
 	
-	//ãƒ­ã‚°å‡ºåŠ›
+	//ƒƒOo—Í
 		private static void Logger(Exception e)
 		{
-			String logFileName = "workspace/docoTsubu/log.txt";
+			String logFileName = "log.txt";
 			FileWriter fw = null;
 			StackTraceElement[] ste = new Throwable().getStackTrace();
 			String path =  System.getProperty("user.dir"); 
 			path = new File(path, logFileName).getPath();
 			
-			//å®Ÿè¡Œã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚¹ã‚¿ãƒƒã‚¯ã«è“„ç©ã•ã‚Œã¦ã„ãã€‚ãã®ä¸­ã®ãƒ‡ãƒ¼ã‚¿ã‚’ã¿ã¦ã©ã“ã§ã‚¨ãƒ©ãƒ¼ã—ãŸã‹ã‚’ç‰¹å®šã™ã‚‹ã€‚
-			//ã‚¹ã‚¿ãƒƒã‚¯å†…ã®æœ€æ–°ã®ãƒ‡ãƒ¼ã‚¿ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆloggerãƒ¡ã‚½ãƒƒãƒ‰ï¼‰ãªã®ã§ãã®ä¸€ã¤å‰ã®ãƒ‡ãƒ¼ã‚¿ãŒã‚¨ãƒ©ãƒ¼ã—ãŸãƒ¡ã‚½ãƒƒãƒ‰ã«ãªã‚‹ã€‚
-		    System.out.print(ste[1].getClassName() + " / "); // ã‚¯ãƒ©ã‚¹åã‚’å–å¾—
-		    System.out.print(ste[1].getMethodName() + " / "); // ãƒ¡ã‚½ãƒƒãƒ‰åã‚’å–å¾—
-		    System.out.println(ste[1]); // ã‚¹ã‚¿ãƒƒã‚¯ãƒˆãƒ¬ãƒ¼ã‚¹ã®æƒ…å ±ã‚’æ•´å½¢ã—ã¦è¡¨ç¤º
+			//Às‚·‚éƒƒ\ƒbƒh‚ªƒXƒ^ƒbƒN‚É’~Ï‚³‚ê‚Ä‚¢‚­B‚»‚Ì’†‚Ìƒf[ƒ^‚ğ‚İ‚Ä‚Ç‚±‚ÅƒGƒ‰[‚µ‚½‚©‚ğ“Á’è‚·‚éB
+			//ƒXƒ^ƒbƒN“à‚ÌÅV‚Ìƒf[ƒ^‚Í‚±‚Ìƒƒ\ƒbƒhiloggerƒƒ\ƒbƒhj‚È‚Ì‚Å‚»‚Ìˆê‚Â‘O‚Ìƒf[ƒ^‚ªƒGƒ‰[‚µ‚½ƒƒ\ƒbƒh‚É‚È‚éB
+		    System.out.print(ste[1].getClassName() + " / "); // ƒNƒ‰ƒX–¼‚ğæ“¾
+		    System.out.print(ste[1].getMethodName() + " / "); // ƒƒ\ƒbƒh–¼‚ğæ“¾
+		    System.out.println(ste[1]); // ƒXƒ^ƒbƒNƒgƒŒ[ƒX‚Ìî•ñ‚ğ®Œ`‚µ‚Ä•\¦
 		    e.printStackTrace();
 		    
-		    //æ—¥ä»˜/ã‚¯ãƒ©ã‚¹/ãƒ¡ã‚½ãƒƒãƒ‰/ãã®ä»–ã®å½¢ã§å‡ºåŠ›ã™ã‚‹
-		    String str = new SimpleDateFormat("yyyy'å¹´'MM'æœˆ'dd'æ—¥'E'æ›œæ—¥'k'æ™‚'mm'åˆ†'ss'ç§’'").format(new Date()) 
+		    //“ú•t/ƒNƒ‰ƒX/ƒƒ\ƒbƒh/‚»‚Ì‘¼‚ÌŒ`‚Åo—Í‚·‚é
+		    String str = new SimpleDateFormat("yyyy'”N'MM'Œ'dd'“ú'E'—j“ú'k''mm'•ª'ss'•b'").format(new Date()) 
 		    				+ "/" + ste[1].getClassName() + "/" + ste[1].getMethodName() + "/" + e + "\n";
 		    System.out.println(str);
 		    
 		    try
 		    {
-		    	//ç¬¬äºŒå¼•æ•°ãŒtrueã ã¨è¿½åŠ ã«ãªã‚‹ã€‚
+		    	//‘æ“ñˆø”‚ªtrue‚¾‚Æ’Ç‰Á‚É‚È‚éB
 		    	fw = new FileWriter(path,true);
 		    	fw.write(str);
 		    
 		    }
 		    catch(IOException e2)
 		    {
-		    	System.out.println("ãƒ­ã‚°ã§ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ");
+		    	System.out.println("ƒƒO‚ÅƒGƒ‰[”­¶");
 		    	Logger(e2);	    	
 		    }
 		    finally
@@ -110,7 +132,7 @@ public class LoginLogic {
 		    	{
 		    		Logger(e3);
 		    	}
-		    	//ã‚¨ãƒ©ãƒ¼ã—ãŸæ™‚ç‚¹ã§å¼·åˆ¶çµ‚äº†
+		    	//ƒGƒ‰[‚µ‚½“_‚Å‹­§I—¹
 		    	System.exit(0);
 		    }
 		}
