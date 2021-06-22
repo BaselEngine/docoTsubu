@@ -31,7 +31,7 @@ public class RegistLogic extends LoginLogic{
 	
 	
 	protected boolean FileWriter(String fileName, List<List<String>> big_list)	{
-		try(FileWriter fw = new FileWriter(fileName);){
+		try(FileWriter fw = new FileWriter(fileName,true);){
 			for (int i = 0; i < big_list.get(1).size(); i++){
 				fw.write(big_list.get(0).get(i) + ":" + big_list.get(1).get(i) + "\n");
 			}
